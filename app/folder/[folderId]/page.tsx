@@ -1,15 +1,23 @@
 import Header from "@/components/Header";
 import Sidebar from "@/components/Sidebar";
 import LinkGrid from "@/components/LinkGrid";
+import { mockFolders } from "@/components/FolderList";
 
-export default function Home() {
+export default async function FolderPage({
+  params,
+}: {
+  params: Promise<{ folderId: string }>;
+}) {
+  const { folderId } = await params;
+  const folder = mockFolders.find((f) => f.id === Number(folderId));
+
   return (
     <div className="flex flex-col h-screen bg-gray-50">
       <Header />
       <div className="flex flex-1 overflow-hidden">
         <Sidebar />
         <main className="flex-1 overflow-y-auto">
-          <LinkGrid />
+          <LinkGrid folderName={folder?.name} />
         </main>
       </div>
     </div>
