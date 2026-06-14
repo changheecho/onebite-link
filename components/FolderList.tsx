@@ -1,25 +1,18 @@
-export type Folder = {
-  id: number;
-  name: string;
-};
-
-export const mockFolders: Folder[] = [
-  { id: 1, name: "개발" },
-  { id: 2, name: "디자인" },
-  { id: 3, name: "뉴스" },
-  { id: 4, name: "업무" },
-];
+"use client";
 
 import Link from "next/link";
+import { useFolderContext } from "@/contexts/FolderContext";
 
 export default function FolderList() {
+  const { folders } = useFolderContext();
+
   return (
     <div className="mt-4">
       <p className="px-3 mb-1 text-xs font-medium text-[var(--text-sub)] uppercase tracking-wider">
         폴더
       </p>
       <ul className="flex flex-col">
-        {mockFolders.map((folder) => (
+        {folders.map((folder) => (
           <li key={folder.id}>
             <Link
               href={`/folder/${folder.id}`}

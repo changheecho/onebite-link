@@ -1,6 +1,10 @@
-import { mockFolders } from "./FolderList";
+"use client";
+
+import { useFolderContext } from "@/contexts/FolderContext";
 
 export default function NewLinkForm() {
+  const { folders } = useFolderContext();
+
   return (
     <div className="max-w-lg mx-auto mt-16 px-6">
       <h2 className="text-xl font-semibold text-[var(--text)] mb-8">새 링크 추가</h2>
@@ -25,7 +29,7 @@ export default function NewLinkForm() {
             className="input-field w-full text-[var(--text)] bg-[var(--card-bg)]"
           >
             <option value="">폴더 선택</option>
-            {mockFolders.map((folder) => (
+            {folders.map((folder) => (
               <option key={folder.id} value={folder.id}>
                 {folder.name}
               </option>

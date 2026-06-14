@@ -60,7 +60,7 @@ export const mockLinks: LinkItem[] = [
 ];
 
 export default function LinkGrid({ folderName }: { folderName?: string }) {
-  const links = folderName
+  const links = folderName !== undefined
     ? mockLinks.filter((link) => link.folder === folderName)
     : mockLinks;
 
