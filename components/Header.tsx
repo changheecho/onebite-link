@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useFolderContext } from "@/contexts/FolderContext";
 
 export default function Header() {
-  const { openModal } = useFolderContext();
+  const { openAddModal } = useFolderContext();
 
   return (
     <header className="flex items-center justify-between px-6 py-3 border-b border-[var(--border)] bg-[var(--card-bg)] shrink-0">
@@ -13,7 +13,7 @@ export default function Header() {
       </span>
       <div className="flex items-center gap-2">
         <button
-          onClick={openModal}
+          onClick={openAddModal}
           className="flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-[var(--text)] border border-[var(--border)] rounded-[6px] transition-colors hover:bg-[var(--hover-bg)]"
         >
           <span className="text-base leading-none">+</span>

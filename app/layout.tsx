@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { FolderProvider } from "@/contexts/FolderContext";
 import NewFolderModal from "@/components/NewFolderModal";
+import DeleteFolderModal from "@/components/DeleteFolderModal";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,6 +34,7 @@ export default function RootLayout({
         <FolderProvider>
           {children}
           <NewFolderModal />
+          <DeleteFolderModal />
         </FolderProvider>
       </body>
     </html>

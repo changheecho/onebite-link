@@ -4,22 +4,22 @@ import { useState } from "react";
 import { useFolderContext } from "@/contexts/FolderContext";
 
 export default function NewFolderModal() {
-  const { isModalOpen, closeModal, addFolder } = useFolderContext();
+  const { isAddModalOpen, closeAddModal, addFolder } = useFolderContext();
   const [name, setName] = useState("");
 
-  if (!isModalOpen) return null;
+  if (!isAddModalOpen) return null;
 
   function handleSave() {
     const trimmed = name.trim();
     if (!trimmed) return;
     addFolder(trimmed);
     setName("");
-    closeModal();
+    closeAddModal();
   }
 
   function handleCancel() {
     setName("");
-    closeModal();
+    closeAddModal();
   }
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {

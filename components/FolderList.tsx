@@ -1,7 +1,69 @@
 "use client";
 
 import Link from "next/link";
-import { useFolderContext } from "@/contexts/FolderContext";
+import { useFolderContext, type Folder } from "@/contexts/FolderContext";
+
+function TrashIcon() {
+  return (
+    <svg
+      className="w-3.5 h-3.5"
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={1.5}
+        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+      />
+    </svg>
+  );
+}
+
+function FolderIcon() {
+  return (
+    <svg
+      className="w-4 h-4 text-[var(--text-sub)] shrink-0"
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={1.5}
+        d="M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V7z"
+      />
+    </svg>
+  );
+}
+
+function FolderItem({ folder }: { folder: Folder }) {
+  const { openDeleteModal } = useFolderContext();
+
+  return (
+    <li className="group relative">
+      <Link
+        href={`/folder/${folder.id}`}
+        className="nav-item-hover flex items-center gap-2 px-3 py-2 pr-8 rounded-[6px] text-sm text-[var(--text)] transition-colors"
+      >
+        <FolderIcon />
+        {folder.name}
+      </Link>
+      <button
+        onClick={(e) => {
+          e.preventDefault();
+          openDeleteModal(folder);
+        }}
+        className="absolute right-2 top-1/2 -translate-y-1/2 p-1 rounded-[4px] text-[var(--text-sub)] opacity-0 group-hover:opacity-100 transition-opacity hover:text-[var(--error)]"
+        aria-label={`${folder.name} 삭제`}
+      >
+        <TrashIcon />
+      </button>
+    </li>
+  );
+}
 
 export default function FolderList() {
   const { folders } = useFolderContext();
@@ -13,27 +75,7 @@ export default function FolderList() {
       </p>
       <ul className="flex flex-col">
         {folders.map((folder) => (
-          <li key={folder.id}>
-            <Link
-              href={`/folder/${folder.id}`}
-              className="nav-item-hover w-full text-left px-3 py-2 rounded-[6px] text-sm text-[var(--text)] transition-colors flex items-center gap-2"
-            >
-              <svg
-                className="w-4 h-4 text-[var(--text-sub)] shrink-0"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={1.5}
-                  d="M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V7z"
-                />
-              </svg>
-              {folder.name}
-            </Link>
-          </li>
+          <FolderItem key={folder.id} folder={folder} />
         ))}
       </ul>
     </div>
