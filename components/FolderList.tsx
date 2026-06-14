@@ -39,28 +39,58 @@ function FolderIcon() {
   );
 }
 
+function PencilIcon() {
+  return (
+    <svg
+      className="w-3.5 h-3.5"
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={1.5}
+        d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+      />
+    </svg>
+  );
+}
+
 function FolderItem({ folder }: { folder: Folder }) {
-  const { openDeleteModal } = useFolderContext();
+  const { openDeleteModal, openEditModal } = useFolderContext();
 
   return (
     <li className="group relative">
       <Link
         href={`/folder/${folder.id}`}
-        className="nav-item-hover flex items-center gap-2 px-3 py-2 pr-8 rounded-[6px] text-sm text-[var(--text)] transition-colors"
+        className="nav-item-hover flex items-center gap-2 px-3 py-2 pr-16 rounded-[6px] text-sm text-[var(--text)] transition-colors"
       >
         <FolderIcon />
         {folder.name}
       </Link>
-      <button
-        onClick={(e) => {
-          e.preventDefault();
-          openDeleteModal(folder);
-        }}
-        className="absolute right-2 top-1/2 -translate-y-1/2 p-1 rounded-[4px] text-[var(--text-sub)] opacity-0 group-hover:opacity-100 transition-opacity hover:text-[var(--error)]"
-        aria-label={`${folder.name} 삭제`}
-      >
-        <TrashIcon />
-      </button>
+      <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
+        <button
+          onClick={(e) => {
+            e.preventDefault();
+            openEditModal(folder);
+          }}
+          className="p-1 rounded-[4px] text-[var(--text-sub)] hover:text-[var(--accent)] transition-colors"
+          aria-label={`${folder.name} 수정`}
+        >
+          <PencilIcon />
+        </button>
+        <button
+          onClick={(e) => {
+            e.preventDefault();
+            openDeleteModal(folder);
+          }}
+          className="p-1 rounded-[4px] text-[var(--text-sub)] hover:text-[var(--error)] transition-colors"
+          aria-label={`${folder.name} 삭제`}
+        >
+          <TrashIcon />
+        </button>
+      </div>
     </li>
   );
 }
