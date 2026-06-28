@@ -6,6 +6,7 @@ import { useFolderContext } from "@/contexts/FolderContext";
 export default function EditFolderModal() {
   const { folderToEdit, closeEditModal, renameFolder } = useFolderContext();
   const [name, setName] = useState("");
+  const [saving, setSaving] = useState(false);
 
   useEffect(() => {
     if (folderToEdit) setName(folderToEdit.name);
@@ -13,14 +14,17 @@ export default function EditFolderModal() {
 
   if (!folderToEdit) return null;
 
-  function handleSave() {
+  async function handleSave() {
     const trimmed = name.trim();
-    if (!trimmed) return;
-    renameFolder(folderToEdit!.id, trimmed);
+    if (!trimmed || saving) return;
+    setSaving(true);
+    await renameFolder(folderToEdit!.id, trimmed);
+    setSaving(false);
     closeEditModal();
   }
 
   function handleCancel() {
+    if (saving) return;
     closeEditModal();
   }
 
@@ -58,7 +62,7 @@ export default function EditFolderModal() {
           <button
             type="button"
             onClick={handleSave}
-            disabled={!name.trim()}
+            disabled={!name.trim() || saving}
             className="btn-accent px-4 py-2 text-sm font-medium text-white rounded-[6px] disabled:opacity-40 disabled:cursor-not-allowed"
           >
             저장
