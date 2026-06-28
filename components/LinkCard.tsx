@@ -2,6 +2,19 @@
 
 import { useLinkContext, type LinkItem } from "@/contexts/LinkContext";
 
+function PencilIcon() {
+  return (
+    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={1.5}
+        d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+      />
+    </svg>
+  );
+}
+
 export type { LinkItem };
 
 function TrashIcon() {
@@ -18,7 +31,7 @@ function TrashIcon() {
 }
 
 export default function LinkCard({ link }: { link: LinkItem }) {
-  const { openDeleteModal } = useLinkContext();
+  const { openDeleteModal, openEditModal } = useLinkContext();
 
   return (
     <article className="group card-hover bg-[var(--card-bg)] rounded-[8px] border border-[var(--border)] overflow-hidden flex flex-col transition-colors">
@@ -36,14 +49,24 @@ export default function LinkCard({ link }: { link: LinkItem }) {
           <span className="text-[13px] text-[var(--text-sub)] bg-[var(--hover-bg)] px-2 py-0.5 rounded-[4px] whitespace-nowrap">
             {link.folder}
           </span>
-          <button
-            type="button"
-            onClick={() => openDeleteModal(link)}
-            className="p-1 rounded-[4px] text-[var(--text-sub)] hover:text-[var(--error)] hover:bg-[var(--hover-bg)] transition-colors opacity-0 group-hover:opacity-100"
-            aria-label={`${link.title} 삭제`}
-          >
-            <TrashIcon />
-          </button>
+          <div className="flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
+            <button
+              type="button"
+              onClick={() => openEditModal(link)}
+              className="p-1 rounded-[4px] text-[var(--text-sub)] hover:text-[var(--accent)] hover:bg-[var(--hover-bg)] transition-colors"
+              aria-label={`${link.title} 수정`}
+            >
+              <PencilIcon />
+            </button>
+            <button
+              type="button"
+              onClick={() => openDeleteModal(link)}
+              className="p-1 rounded-[4px] text-[var(--text-sub)] hover:text-[var(--error)] hover:bg-[var(--hover-bg)] transition-colors"
+              aria-label={`${link.title} 삭제`}
+            >
+              <TrashIcon />
+            </button>
+          </div>
         </div>
         <h3 className="text-sm font-semibold text-[var(--text)] line-clamp-2 leading-snug">
           {link.title}
