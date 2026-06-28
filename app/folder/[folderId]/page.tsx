@@ -1,7 +1,8 @@
 import Header from "@/components/Header";
 import Sidebar from "@/components/Sidebar";
 import LinkGrid from "@/components/LinkGrid";
-import { initialFolders } from "@/lib/folderData";
+import { cookies } from "next/headers";
+import { createClient } from "@/utils/supabase/server";
 
 export default async function FolderPage({
   params,
@@ -9,7 +10,13 @@ export default async function FolderPage({
   params: Promise<{ folderId: string }>;
 }) {
   const { folderId } = await params;
-  const folder = initialFolders.find((f) => f.id === Number(folderId));
+  const cookieStore = await cookies();
+  const supabase = createClient(cookieStore);
+  const { data: folder } = await supabase
+    .from("folder")
+    .select("name")
+    .eq("id", Number(folderId))
+    .single();
 
   return (
     <div className="flex flex-col h-screen bg-[var(--bg)]">

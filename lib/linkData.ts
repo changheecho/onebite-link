@@ -5,6 +5,7 @@ export type LinkItem = {
   description: string;
   thumbnail?: string;
   folder: string;
+  folder_id?: number | null;
 };
 
 export const mockLinks: LinkItem[] = [

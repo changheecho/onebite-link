@@ -33,13 +33,14 @@ export default function NewLinkForm() {
 
       const folder = folders.find((f) => f.id === Number(selectedFolderId));
 
-      addLink({
-        id: Date.now(),
+      await addLink({
+        id: 0,
         title: data.title || url,
         url,
         description: data.description ?? "",
         thumbnail: data.thumbnail || undefined,
         folder: folder?.name ?? "",
+        folder_id: folder?.id ?? null,
       });
 
       router.push("/");
