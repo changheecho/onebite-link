@@ -7,9 +7,9 @@ export default function DeleteLinkModal() {
 
   if (!linkToDelete) return null;
 
-  function handleDelete() {
+  async function handleDelete() {
     if (!linkToDelete) return;
-    deleteLink(linkToDelete.id);
+    await deleteLink(linkToDelete.id);
     closeDeleteModal();
   }
 
