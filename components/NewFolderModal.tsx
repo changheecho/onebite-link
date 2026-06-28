@@ -6,18 +6,22 @@ import { useFolderContext } from "@/contexts/FolderContext";
 export default function NewFolderModal() {
   const { isAddModalOpen, closeAddModal, addFolder } = useFolderContext();
   const [name, setName] = useState("");
+  const [saving, setSaving] = useState(false);
 
   if (!isAddModalOpen) return null;
 
-  function handleSave() {
+  async function handleSave() {
     const trimmed = name.trim();
-    if (!trimmed) return;
-    addFolder(trimmed);
+    if (!trimmed || saving) return;
+    setSaving(true);
+    await addFolder(trimmed);
     setName("");
+    setSaving(false);
     closeAddModal();
   }
 
   function handleCancel() {
+    if (saving) return;
     setName("");
     closeAddModal();
   }
@@ -57,7 +61,7 @@ export default function NewFolderModal() {
           <button
             type="button"
             onClick={handleSave}
-            disabled={!name.trim()}
+            disabled={!name.trim() || saving}
             className="btn-accent px-4 py-2 text-sm font-medium text-white rounded-[6px] disabled:opacity-40 disabled:cursor-not-allowed"
           >
             저장
