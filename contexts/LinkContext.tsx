@@ -10,7 +10,7 @@ type LinkContextType = {
   links: LinkItem[];
   addLink: (link: LinkItem) => Promise<void>;
   deleteLink: (id: number) => void;
-  updateLink: (id: number, fields: Partial<Pick<LinkItem, "title" | "description" | "folder">>) => void;
+  updateLink: (id: number, fields: Partial<Pick<LinkItem, "title" | "description" | "folder" | "folder_id">>) => Promise<void>;
   linkToDelete: LinkItem | null;
   openDeleteModal: (link: LinkItem) => void;
   closeDeleteModal: () => void;
@@ -82,8 +82,17 @@ export function LinkProvider({ children }: { children: ReactNode }) {
     setLinks((prev) => prev.filter((l) => l.id !== id));
   }
 
-  function updateLink(id: number, fields: Partial<Pick<LinkItem, "title" | "description" | "folder">>) {
-    setLinks((prev) => prev.map((l) => (l.id === id ? { ...l, ...fields } : l)));
+  async function updateLink(id: number, fields: Partial<Pick<LinkItem, "title" | "description" | "folder" | "folder_id">>) {
+    const supabase = createClient();
+    const { error } = await supabase
+      .from("link")
+      .update({
+        title: fields.title,
+        description: fields.description || null,
+        folder_id: fields.folder_id ?? null,
+      })
+      .eq("id", id);
+    if (!error) setLinks((prev) => prev.map((l) => (l.id === id ? { ...l, ...fields } : l)));
   }
 
   return (

@@ -10,25 +10,30 @@ export default function EditLinkModal() {
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [folder, setFolder] = useState("");
+  const [selectedFolderId, setSelectedFolderId] = useState<number | null>(null);
+  const [saving, setSaving] = useState(false);
 
   useEffect(() => {
     if (linkToEdit) {
       setTitle(linkToEdit.title);
       setDescription(linkToEdit.description);
-      setFolder(linkToEdit.folder);
+      setSelectedFolderId(linkToEdit.folder_id ?? null);
     }
   }, [linkToEdit]);
 
   if (!linkToEdit) return null;
 
-  function handleSave() {
-    if (!title.trim()) return;
-    updateLink(linkToEdit!.id, {
+  async function handleSave() {
+    if (!title.trim() || saving) return;
+    const selectedFolder = folders.find((f) => f.id === selectedFolderId);
+    setSaving(true);
+    await updateLink(linkToEdit!.id, {
       title: title.trim(),
       description: description.trim(),
-      folder,
+      folder_id: selectedFolderId,
+      folder: selectedFolder?.name ?? "",
     });
+    setSaving(false);
     closeEditModal();
   }
 
@@ -51,13 +56,13 @@ export default function EditLinkModal() {
           <div className="flex flex-col gap-1.5">
             <label className="text-sm font-medium text-[var(--text)]">폴더</label>
             <select
-              value={folder}
-              onChange={(e) => setFolder(e.target.value)}
+              value={selectedFolderId ?? ""}
+              onChange={(e) => setSelectedFolderId(e.target.value ? Number(e.target.value) : null)}
               className="input-field w-full text-[var(--text)] bg-[var(--card-bg)]"
             >
               <option value="">폴더 없음</option>
               {folders.map((f) => (
-                <option key={f.id} value={f.name}>
+                <option key={f.id} value={f.id}>
                   {f.name}
                 </option>
               ))}
@@ -94,7 +99,7 @@ export default function EditLinkModal() {
           <button
             type="button"
             onClick={handleSave}
-            disabled={!title.trim()}
+            disabled={!title.trim() || saving}
             className="btn-accent px-4 py-2 text-sm font-medium text-white rounded-[6px] disabled:opacity-40 disabled:cursor-not-allowed"
           >
             저장
