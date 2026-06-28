@@ -7,9 +7,9 @@ export default function DeleteFolderModal() {
 
   if (!folderToDelete) return null;
 
-  function handleDelete() {
+  async function handleDelete() {
     if (!folderToDelete) return;
-    deleteFolder(folderToDelete.id);
+    await deleteFolder(folderToDelete.id);
     closeDeleteModal();
   }
 
